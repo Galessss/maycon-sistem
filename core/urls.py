@@ -23,4 +23,6 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('signup/', views.signup, name='signup'),
     path('estoque/atualizar/<int:id>/', views.atualizar_estoque, name='atualizar_estoque'),
+    path('cliente/novo/', views.cadastrar_cliente, name='cadastrar_cliente'),
+    path('fidelidade/', views.consulta_fidelidade, name='consulta_fidelidade'),
 ]

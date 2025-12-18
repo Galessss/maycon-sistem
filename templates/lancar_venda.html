@@ -18,10 +18,6 @@
         margin-bottom: 24px;
         text-align: center;
     }
-    /* Estilizando o formulário do Django */
-    .venda-container p {
-        margin-bottom: 16px;
-    }
     .venda-container label {
         display: block;
         font-size: 14px;
@@ -36,10 +32,7 @@
         border-radius: 6px;
         color: white;
         box-sizing: border-box;
-    }
-    .venda-container input:focus, .venda-container select:focus {
-        outline: 2px solid #3f3f46;
-        border-color: transparent;
+        margin-bottom: 15px;
     }
     .btn-finalizar {
         width: 100%;
@@ -55,6 +48,39 @@
     }
     .btn-finalizar:hover { opacity: 0.9; }
     
+    .secao-titulo {
+        font-size: 12px;
+        color: #71717a;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 20px 0 10px 0;
+        border-bottom: 1px solid #27272a;
+        padding-bottom: 5px;
+    }
+
+    /* Painel de Resumo de Valores */
+    .resumo-valores {
+        background-color: #09090b;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        border: 1px solid #27272a;
+    }
+    .linha-resumo {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+    .total-final {
+        border-top: 1px solid #27272a;
+        margin-top: 10px;
+        padding-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #4ade80;
+    }
+
     .alert-success {
         background-color: #052e16;
         color: #4ade80;
@@ -65,6 +91,30 @@
         font-size: 14px;
         text-align: center;
     }
+
+    .fidelidade-info {
+        background-color: #09090b;
+        border: 1px dashed #3f3f46;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 20px;
+        text-align: center;
+    }
+    .progress-bar-bg {
+        background-color: #27272a;
+        height: 8px;
+        border-radius: 4px;
+        margin-top: 10px;
+        overflow: hidden;
+    }
+    .progress-bar-fill {
+        background-color: #4ade80;
+        height: 100%;
+        transition: width 0.5s ease-in-out;
+    }
+.resumo-valores { background-color: #09090b; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #27272a; }
+    .linha-resumo { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+    .total-final { border-top: 1px solid #27272a; margin-top: 10px; padding-top: 10px; font-size: 18px; font-weight: bold; color: #4ade80; }
 </style>
 
 <div class="venda-container">
@@ -76,10 +126,107 @@
         {% endfor %}
     {% endif %}
 
-    <form method="post">
+    <form method="post" id="form-venda">
         {% csrf_token %}
-        {{ form.as_p }}
+        
+        <div class="secao-titulo">Identificação</div>
+        <p>
+            <label>Selecionar Cliente:</label>
+            {{ venda_form.cliente }}
+        </p>
+
+        <div class="secao-titulo">Itens e Desconto</div>
+        <p>
+            <label>Produto:</label>
+            <select name="produto" id="id_produto" required>
+                <option value="" data-price="0">---------</option>
+                {% for produto in item_form.fields.produto.queryset %}
+                    <option value="{{ produto.id }}" data-price="{{ produto.preco_venda|stringformat:".2f" }}">
+                        {{ produto.nome }} (R$ {{ produto.preco_venda }})
+                    </option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <label>Quantidade:</label>
+            <input type="number" name="quantidade" id="id_quantidade" value="1" min="1" required>
+        </p>
+
+        <div style="display: flex; gap: 10px;">
+            <div style="flex: 1;">
+                <label>Tipo Desconto:</label>
+                {{ venda_form.tipo_desconto }}
+            </div>
+            <div style="flex: 1;">
+                <label>Desconto:</label>
+                {{ venda_form.desconto }}
+            </div>
+        </div>
+
+        <div class="resumo-valores">
+            <div class="linha-resumo" style="color: #a1a1aa;">
+                <span>Subtotal:</span>
+                <span id="label-subtotal">R$ 0,00</span>
+            </div>
+            <div class="linha-resumo" style="color: #ef4444;">
+                <span>Desconto Aplicado:</span>
+                <span id="label-desconto">- R$ 0,00</span>
+            </div>
+            <div class="linha-resumo total-final">
+                <span>TOTAL A PAGAR:</span>
+                <span id="label-total">R$ 0,00</span>
+            </div>
+        </div>
+
         <button type="submit" class="btn-finalizar">Finalizar Venda</button>
     </form>
-</div>
+    
+    </div>
+
+<script>
+    const inputQtd = document.getElementById('id_quantidade');
+    const inputDesc = document.querySelector('[name="desconto"]');
+    const selectTipo = document.querySelector('[name="tipo_desconto"]');
+    const selectProd = document.getElementById('id_produto');
+
+    const lbSubtotal = document.getElementById('label-subtotal');
+    const lbDesconto = document.getElementById('label-desconto');
+    const lbTotal = document.getElementById('label-total');
+
+    function calcularTudo() {
+        // 1. Pega o preço do produto selecionado pelo atributo data-price
+        const selectedOption = selectProd.options[selectProd.selectedIndex];
+        const precoUnitario = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+        
+        // 2. Valores base
+        const qtd = parseInt(inputQtd.value) || 0;
+        const subtotal = precoUnitario * qtd;
+        
+        // 3. Cálculo do Desconto
+        let descontoDigitado = parseFloat(inputDesc.value) || 0;
+        let valorDesconto = 0;
+
+        if (selectTipo.value === 'porcentagem') {
+            valorDesconto = subtotal * (descontoDigitado / 100);
+        } else {
+            valorDesconto = descontoDigitado;
+        }
+
+        const totalFinal = subtotal - valorDesconto;
+
+        // 4. Atualiza a tela
+        lbSubtotal.innerText = `R$ ${subtotal.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
+        lbDesconto.innerText = `- R$ ${valorDesconto.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
+        lbTotal.innerText = `R$ ${totalFinal.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
+    }
+
+    // Eventos para disparar o cálculo
+    [inputQtd, inputDesc, selectTipo, selectProd].forEach(el => {
+        el.addEventListener('input', calcularTudo);
+        el.addEventListener('change', calcularTudo);
+    });
+
+    // Inicia zerado
+    calcularTudo();
+</script>
 {% endblock %}

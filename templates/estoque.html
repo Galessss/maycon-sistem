@@ -132,39 +132,50 @@
                 <th>Ações</th>
             </tr>
         </thead>
-        <tbody>
-            {% for produto in produtos %}
-            <tr>
-                <td><strong>{{ produto.nome }}</strong></td>
-                <td>R$ {{ produto.preco_venda }}</td>
-                <td>
-                    <form action="{% url 'atualizar_estoque' produto.id %}" method="post" class="form-estoque">
-                        {% csrf_token %}
-                        <input type="number" name="quantidade" value="{{ produto.estoque }}" class="input-estoque">
-                        <button type="submit" class="btn-save-mini">OK</button>
-                    </form>
-                </td>
-                <td>
-                    {% if produto.estoque > 5 %}
-                        <span class="badge-estoque status-ok">Em Stock</span>
-                    {% elif produto.estoque > 0 %}
-                        <span class="badge-estoque status-baixo">Stock Baixo</span>
-                    {% else %}
-                        <span class="badge-estoque status-zerado">Estoque Zerado</span>
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="{% url 'deletar_produto' produto.id %}" 
-                       class="btn-deletar" 
-                       onclick="return confirm('Tem certeza que deseja excluir este produto?')">
-                       Excluir
-                    </a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="5" style="text-align: center; color: #a1a1aa; padding: 40px;">Nenhum produto cadastrado.</td></tr>
-            {% endfor %}
-        </tbody>
+  <tbody>
+    {% for produto in produtos %}
+    <tr>
+        <form action="{% url 'atualizar_estoque' produto.id %}" method="post" class="form-estoque">
+            {% csrf_token %}
+            <td><strong>{{ produto.nome }}</strong></td>
+            
+            <td>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <span style="color: #a1a1aa; font-size: 12px;">R$</span>
+                    <input type="text" name="preco" value="{{ produto.preco_venda }}" class="input-estoque" style="width: 80px;">
+                </div>
+            </td>
+
+            <td>
+                <div class="form-estoque">
+                    <input type="number" name="quantidade" value="{{ produto.estoque }}" class="input-estoque">
+                    <button type="submit" class="btn-save-mini">OK</button>
+                </div>
+            </td>
+
+            <td>
+                {% if produto.estoque > 5 %}
+                    <span class="badge-estoque status-ok">Em Stock</span>
+                {% elif produto.estoque > 0 %}
+                    <span class="badge-estoque status-baixo">Stock Baixo</span>
+                {% else %}
+                    <span class="badge-estoque status-zerado">Estoque Zerado</span>
+                {% endif %}
+            </td>
+            
+            <td>
+                <a href="{% url 'deletar_produto' produto.id %}" 
+                   class="btn-deletar" 
+                   onclick="return confirm('Tem certeza que deseja excluir este produto?')">
+                   Excluir
+                </a>
+            </td>
+        </form>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5" style="text-align: center; color: #a1a1aa; padding: 40px;">Nenhum produto cadastrado.</td></tr>
+    {% endfor %}
+</tbody>
     </table>
 </div>
 {% endblock %}
