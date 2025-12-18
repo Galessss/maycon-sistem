@@ -49,18 +49,26 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="{% url 'historico_vendas' %}" class="nav-brand">MAYCON SISTEM</a>
-        <div class="nav-links">
-            <a href="{% url 'historico_vendas' %}">Dashboard</a>
-            <a href="{% url 'lancar_venda' %}">Nova Venda</a>
-            <a href="{% url 'lista_estoque' %}">Estoque</a>
-            <a href="{% url 'cadastrar_produto' %}">Cadastrar Produto</a>
-        </div>
-        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+    <a href="{% url 'historico_vendas' %}" class="nav-brand">MAYCON SISTEM</a>
+    
+    <div class="nav-links">
+        <a href="{% url 'historico_vendas' %}">Dashboard</a>
+        <a href="{% url 'lancar_venda' %}">Nova Venda</a>
+        <a href="{% url 'lista_estoque' %}">Estoque</a>
+        <a href="{% url 'cadastrar_produto' %}">Cadastrar Produto</a>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <span style="color: #a1a1aa; font-size: 13px;">
+            Olá, <strong style="color: #fafafa;">{{ user.username }}</strong>
+        </span>
+        
+        <form action="{% url 'logout' %}" method="post" style="display: inline; margin: 0;">
             {% csrf_token %}
             <button type="submit" class="btn-logout">Sair</button>
         </form>
-    </nav>
+    </div>
+</nav>
 
     <div class="container">
         {% block content %}

@@ -19,4 +19,8 @@ urlpatterns = [
     # Rotas de Estoque (As que estavam faltando os "names")
     path('estoque/', views.lista_estoque, name='lista_estoque'),
     path('estoque/novo/', views.cadastrar_produto, name='cadastrar_produto'),
+    path('estoque/deletar/<int:id>/', views.deletar_produto, name='deletar_produto'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('signup/', views.signup, name='signup'),
+    path('estoque/atualizar/<int:id>/', views.atualizar_estoque, name='atualizar_estoque'),
 ]

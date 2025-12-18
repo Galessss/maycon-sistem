@@ -123,3 +123,4 @@ LOGIN_REDIRECT_URL = 'historico_vendas'
 # Se o usuário tentar acessar uma página restrita sem estar logado, 
 # ele será mandado para cá:
 LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'login'
