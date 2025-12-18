@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maycon Sistem - Gestão</title>
+    <style>
+        body {
+            background-color: #09090b;
+            color: #fafafa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+        }
+        /* Estilo da Navbar */
+        .navbar {
+            background-color: #18181b;
+            border-bottom: 1px solid #27272a;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+        .nav-brand { font-weight: 700; font-size: 1.2rem; color: #fafafa; text-decoration: none; }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a {
+            color: #a1a1aa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: #fafafa; }
+        .nav-links a.active { color: #fafafa; border-bottom: 2px solid #fafafa; padding-bottom: 20px; }
+        
+        .container { padding: 32px; max-width: 1200px; margin: auto; }
+        .btn-logout {
+            background: transparent;
+            border: 1px solid #27272a;
+            color: #ef4444;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .btn-logout:hover { background: #450a0a; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'historico_vendas' %}" class="nav-brand">MAYCON SISTEM</a>
+        <div class="nav-links">
+            <a href="{% url 'historico_vendas' %}">Dashboard</a>
+            <a href="{% url 'lancar_venda' %}">Nova Venda</a>
+            <a href="{% url 'lista_estoque' %}">Estoque</a>
+            <a href="{% url 'cadastrar_produto' %}">Cadastrar Produto</a>
+        </div>
+        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn-logout">Sair</button>
+        </form>
+    </nav>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Maycon Sistem</title>
+    <style>
+        body {
+            background-color: #09090b; /* Fundo escuro igual da imagem */
+            color: #fafafa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-card {
+            background-color: #18181b;
+            border: 1px solid #27272a;
+            padding: 24px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .login-card h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .login-card p {
+            color: #a1a1aa;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 14px; margin-bottom: 8px; }
+        input {
+            width: 100%;
+            padding: 10px;
+            background-color: #09090b;
+            border: 1px solid #27272a;
+            border-radius: 6px;
+            color: white;
+            box-sizing: border-box;
+        }
+        input:focus { outline: 2px solid #3f3f46; border-color: transparent; }
+        .btn-login {
+            width: 100%;
+            padding: 10px;
+            background-color: #fafafa;
+            color: #18181b;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: opacity 0.2s;
+        }
+        .btn-login:hover { opacity: 0.9; }
+        .footer-text {
+            text-align: center;
+            font-size: 12px;
+            color: #a1a1aa;
+            margin-top: 16px;
+        }
+        .footer-text a { color: #fafafa; text-decoration: none; border-bottom: 1px solid #3f3f46; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>Login to your account</h2>
+        <p>Enter your credentials below to login to your account</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Seu usuário" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+        
+        <div class="footer-text">
+            Don't have an account? <a href="#">Sign up</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .produto-container {
+        max-width: 500px;
+        margin: 40px auto;
+        background-color: #18181b;
+        border: 1px solid #27272a;
+        padding: 32px;
+        border-radius: 12px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .produto-container h2 {
+        margin-top: 0;
+        font-size: 24px;
+        font-weight: 600;
+        color: #fafafa;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+    .produto-container p.subtitle {
+        color: #a1a1aa;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 24px;
+    }
+    /* Estilização dos campos do formulário Django */
+    .produto-container p {
+        margin-bottom: 16px;
+    }
+    .produto-container label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 8px;
+        color: #a1a1aa;
+    }
+    .produto-container input {
+        width: 100%;
+        padding: 10px;
+        background-color: #09090b;
+        border: 1px solid #27272a;
+        border-radius: 6px;
+        color: white;
+        box-sizing: border-box;
+    }
+    .produto-container input:focus {
+        outline: 2px solid #3f3f46;
+        border-color: transparent;
+    }
+    .btn-salvar {
+        width: 100%;
+        padding: 12px;
+        background-color: #fafafa;
+        color: #18181b;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: opacity 0.2s;
+    }
+    .btn-salvar:hover { opacity: 0.9; }
+    
+    .link-voltar {
+        display: block;
+        text-align: center;
+        margin-top: 16px;
+        color: #a1a1aa;
+        font-size: 13px;
+        text-decoration: none;
+    }
+    .link-voltar:hover { color: #fafafa; }
+</style>
+
+<div class="produto-container">
+    <h2>Cadastrar Produto</h2>
+    <p class="subtitle">Adicione novos itens ao estoque da loja</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-salvar">Salvar no Estoque</button>
+    </form>
+    
+    <a href="{% url 'lista_estoque' %}" class="link-voltar">← Voltar para a lista</a>
+</div>
+{% endblock %}

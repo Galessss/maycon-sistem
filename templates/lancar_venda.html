@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .venda-container {
+        max-width: 500px;
+        margin: 20px auto;
+        background-color: #18181b;
+        border: 1px solid #27272a;
+        padding: 32px;
+        border-radius: 12px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .venda-container h2 {
+        margin-top: 0;
+        font-size: 24px;
+        color: #fafafa;
+        margin-bottom: 24px;
+        text-align: center;
+    }
+    /* Estilizando o formulário do Django */
+    .venda-container p {
+        margin-bottom: 16px;
+    }
+    .venda-container label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 8px;
+        color: #a1a1aa;
+    }
+    .venda-container input, .venda-container select {
+        width: 100%;
+        padding: 10px;
+        background-color: #09090b;
+        border: 1px solid #27272a;
+        border-radius: 6px;
+        color: white;
+        box-sizing: border-box;
+    }
+    .venda-container input:focus, .venda-container select:focus {
+        outline: 2px solid #3f3f46;
+        border-color: transparent;
+    }
+    .btn-finalizar {
+        width: 100%;
+        padding: 12px;
+        background-color: #fafafa;
+        color: #18181b;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: opacity 0.2s;
+    }
+    .btn-finalizar:hover { opacity: 0.9; }
+    
+    .alert-success {
+        background-color: #052e16;
+        color: #4ade80;
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid #14532d;
+        margin-bottom: 20px;
+        font-size: 14px;
+        text-align: center;
+    }
+</style>
+
+<div class="venda-container">
+    <h2>Nova Venda</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert-success">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-finalizar">Finalizar Venda</button>
+    </form>
+</div>
+{% endblock %}

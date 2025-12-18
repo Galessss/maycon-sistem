@@ -1,0 +1,7 @@
+<h1>Bem-vindo, {{ user.username }}!</h1>
+<hr>
+<h3>Balanço Diário ({{ now|date:"d/m/Y" }})</h3>
+<p>Total de Vendas Realizadas: <strong>{{ total_vendas }}</strong></p>
+<p>Valor Total em Caixa: <strong>R$ {{ total_financeiro }}</strong></p>
+
+<a href="{% url 'logout' %}">Sair do Sistema</a>

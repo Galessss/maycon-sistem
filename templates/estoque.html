@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .estoque-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+    .estoque-header h2 {
+        margin: 0;
+        font-size: 24px;
+        color: #fafafa;
+    }
+    .btn-novo-produto {
+        padding: 10px 16px;
+        background-color: #fafafa;
+        color: #18181b;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: opacity 0.2s;
+    }
+    .btn-novo-produto:hover { opacity: 0.9; }
+
+    .table-container {
+        background-color: #18181b;
+        border: 1px solid #27272a;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+    th {
+        background-color: #1c1c1f;
+        padding: 16px;
+        font-size: 13px;
+        color: #a1a1aa;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid #27272a;
+    }
+    td {
+        padding: 16px;
+        font-size: 14px;
+        color: #fafafa;
+        border-bottom: 1px solid #27272a;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background-color: #27272a; transition: background 0.2s; }
+
+    /* Badge de Stock */
+    .badge-estoque {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    .status-ok { background-color: #052e16; color: #4ade80; }
+    .status-baixo { background-color: #450a0a; color: #f87171; }
+    .status-zerado { background-color: #27272a; color: #a1a1aa; border: 1px solid #3f3f46; }
+</style>
+
+<div class="estoque-header">
+    <h2>Gestão de Estoque</h2>
+    <a href="{% url 'cadastrar_produto' %}" class="btn-novo-produto">+ Novo Produto</a>
+</div>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Preço de Venda</th>
+                <th>Qtd. em Stock</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+    {% for produto in produtos %}
+    <tr>
+        <td><strong>{{ produto.nome }}</strong></td>
+        <td>R$ {{ produto.preco_venda }}</td>
+        <td>{{ produto.estoque }} un.</td>
+        <td>
+            {% if produto.estoque > 5 %}
+                <span class="badge-estoque status-ok">Em Stock</span>
+            {% elif produto.estoque > 0 %}
+                <span class="badge-estoque status-baixo">Stock Baixo</span>
+            {% else %}
+                <span class="badge-estoque status-zerado">Estoque Zerado</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4" style="text-align: center; color: #a1a1aa; padding: 40px;">
+            Nenhum produto cadastrado no momento.
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+    </table>
+</div>
+{% endblock %}
