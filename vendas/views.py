@@ -6,7 +6,9 @@ from django.db.models import Sum
 from datetime import timedelta
 from .models import Venda, Produto
 from .forms import ItemVendaForm, ProdutoForm
-
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
 @login_required
 def historico_vendas(request):
     agora = timezone.now()
@@ -79,3 +81,35 @@ def lista_estoque(request):
     produtos = Produto.objects.all()
     # Certifique-se de que existe um arquivo estoque.html em templates
     return render(request, 'estoque.html', {'produtos': produtos})
+
+
+@login_required
+def deletar_produto(request, id):
+    produto = get_object_or_404(Produto, id=id)
+    produto.delete()
+    messages.success(request, f"Produto '{produto.nome}' removido com sucesso!")
+    return redirect('lista_estoque')
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user) # Loga automaticamente após cadastrar
+            return redirect('historico_vendas')
+    else:
+        form = UserCreationForm()
+    return render(request, 'signup.html', {'form': form})
+
+
+@login_required
+def atualizar_estoque(request, id):
+    produto = get_object_or_404(Produto, id=id)
+    if request.method == 'POST':
+        nova_qtd = request.POST.get('quantidade')
+        if nova_qtd is not None:
+            produto.estoque = int(nova_qtd)
+            produto.save()
+            messages.success(request, f"Estoque de {produto.nome} atualizado!")
+    return redirect('lista_estoque')

@@ -63,25 +63,33 @@
 <div class="table-container">
     <h3 style="margin-top:0; font-size: 16px; color: #fafafa; margin-bottom: 15px;">Vendas do Período</h3>
     <table>
-        <thead>
-            <tr>
-                <th>Data/Hora</th>
-                <th>Vendedor</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for venda in vendas_recentes %}
-            <tr>
-                <td>{{ venda.data_venda|date:"d/m H:i" }}</td>
-                <td>{{ venda.usuario.username }}</td>
-                <td style="color: #4ade80;">R$ {{ venda.total_venda }}</td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="3" style="text-align: center; color: #71717a;">Sem vendas neste período.</td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <thead>
+        <tr>
+            <th>Data/Hora</th>
+            <th>Vendedor</th>
+            <th>Produto(s)</th> <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for venda in vendas_recentes %}
+        <tr>
+            <td>{{ venda.data_venda|date:"d/m H:i" }}</td>
+            <td>{{ venda.usuario.username }}</td>
+            <td>
+                {# Busca todos os itens ligados a esta venda #}
+                {% for item in venda.itens.all %}
+                    {{ item.produto.nome }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    Sem itens
+                {% endfor %}
+            </td>
+            <td style="color: #4ade80; font-weight: 600;">R$ {{ venda.total_venda }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" style="text-align: center; color: #71717a; padding: 30px;">Sem vendas neste período.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
