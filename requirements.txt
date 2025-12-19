@@ -1,0 +1,7 @@
+
+django>=6.0
+djangorestframework
+asgiref
+sqlparse
+tzdata
+

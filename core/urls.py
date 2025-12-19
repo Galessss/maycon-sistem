@@ -25,4 +25,5 @@ urlpatterns = [
     path('estoque/atualizar/<int:id>/', views.atualizar_estoque, name='atualizar_estoque'),
     path('cliente/novo/', views.cadastrar_cliente, name='cadastrar_cliente'),
     path('fidelidade/', views.consulta_fidelidade, name='consulta_fidelidade'),
+    path('api/produtos/', views.api_lista_produtos, name='api_produtos'),
 ]
