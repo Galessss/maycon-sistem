@@ -8,6 +8,10 @@ from .models import Venda, Produto, Cliente
 from .forms import VendaForm, ItemVendaForm, ProdutoForm, ClienteForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Produto
+from .serializers import ProdutoSerializer
 
 # --- DASHBOARD / HISTÓRICO ---
 @login_required
@@ -176,3 +180,9 @@ def consulta_fidelidade(request):
         cliente.faltam = 20 - cliente.compras_fidelidade
         
     return render(request, 'fidelidade.html', {'clientes': clientes, 'query': query})
+
+@api_view(['GET'])
+def api_lista_produtos(request):
+    produtos = Produto.objects.all()
+    serializer = ProdutoSerializer(produtos, many=True)
+    return Response(serializer.data)
